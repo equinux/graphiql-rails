@@ -9,6 +9,7 @@
   <body>
     <%= content_tag :div, 'Loading...', id: 'graphiql-container', data: {
       graphql_endpoint_path: graphql_endpoint_path,
+      subscription_url: subscription_url,
       initial_query: GraphiQL::Rails.config.initial_query,
       logo: GraphiQL::Rails.config.logo,
       headers: GraphiQL::Rails.config.resolve_headers(self),

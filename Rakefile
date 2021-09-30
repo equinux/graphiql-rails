@@ -1,7 +1,7 @@
-require 'bundler/setup'
+require "bundler/setup"
 Bundler::GemHelper.install_tasks
 
-require 'rake/testtask'
+require "rake/testtask"
 
 Rake::TestTask.new do |t|
   t.libs << "test" << "lib"
@@ -40,7 +40,7 @@ task :update_graphiql do
   FileUtils.mkdir_p(update_path)
   FileUtils.cd(update_path) do
     sh("npm init --force")
-    sh("npm install graphiql react react-dom")
+    sh("npm install graphiql react react-dom subscriptions-transport-ws")
 
     FileUtils.cd("./node_modules/graphiql") do
       new_version = npm_version("./package.json")
@@ -58,7 +58,6 @@ task :update_graphiql do
 
       puts "Copying React #{new_version}"
       FileUtils.cp("./umd/react.production.min.js", "../../../app/assets/javascripts/graphiql/rails/react-#{new_version}.js")
-
     end
 
     FileUtils.cd("./node_modules/react-dom") do
@@ -67,6 +66,14 @@ task :update_graphiql do
 
       puts "Copying ReactDOM #{new_version}"
       FileUtils.cp("./umd/react-dom.production.min.js", "../../../app/assets/javascripts/graphiql/rails/react-dom-#{new_version}.js")
+    end
+
+    FileUtils.cd("./node_modules/subscriptions-transport-ws") do
+      new_version = npm_version("./package.json")
+      new_js_versions["subscriptions-transport-ws"] = new_version
+
+      puts "Copying SubscriptionsTransportWs #{new_version}"
+      FileUtils.cp("./browser/client.js", "../../../app/assets/javascripts/graphiql/rails/subscriptions-transport-ws-#{new_version}.js")
     end
   end
 
